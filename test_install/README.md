@@ -7,6 +7,7 @@ You should have been directed here as the first to run after cloning out this re
 ## Prerequisites
 
 - GTK+ v3 installed on system.
+- gtkmm v3 installed on system.
 - C++ Compiler (modern).
 - GNU Make v3.82 or higher.
 
@@ -14,7 +15,8 @@ You should have been directed here as the first to run after cloning out this re
 
 - macOS Catalina (10.15.4)
 - Homebrew: [https://brew.sh/](https://brew.sh/)
-- GTK+3 install: 3.24.18 (2020-04-14, macOS Homebrew)
+- GTK+3 install: 3.24.18 (macOS Homebrew)
+- gtkmm3 install: 3.24.2 (macOS Homebrew)
 - GCC install: 9.3.0_1 (macOS Homebrew)
 - GNU Make (`gmake`) install: 4.3 (macOS Homebrew)
 

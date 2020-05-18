@@ -48,7 +48,7 @@ bre install gcc;
 1. Homebrew install GTK+ v3 to macOS system:
 ```bash
 brew install gtk+3;
-brew install gtkmm3;  # Optional, C++ bindings in-case you want to do C++ development.
+brew install gtkmm3;  # C++ bindings, to do modern C++ (instead of C) development.
 ```
 1. Go to the [test_install README](test_install/README.md) and confirm that the application builds and runs.
 
