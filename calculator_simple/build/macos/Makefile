@@ -9,7 +9,7 @@
 
 CC_STD = c++2a
 GCC := gcc-9 --std=$(CC_STD)
-FLAGS = -Wall -pedantic -g
+FLAGS = -Wall -Wextra -Werror -pedantic -g
 
 LIB_GTKMM = gtkmm-3.0
 LIB_GLIB = glib-2.0
