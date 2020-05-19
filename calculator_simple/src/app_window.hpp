@@ -34,9 +34,15 @@ class AppWindow :
    public:
       AppWindow();
       virtual ~AppWindow();
-
+ 
+   protected:
       void handle_display_update();
-      bool handle_radix_change(Gtk::ScrollType const & scroll_type, double const & radix_new);
+      
+      bool handle_radix_change(
+              Gtk::ScrollType const & scroll_type
+            , double const & radix_new
+      );
+      
       void handle_btn_0();
       void handle_btn_1();
       void handle_btn_2();
@@ -53,8 +59,6 @@ class AppWindow :
       void handle_btn_d();
       void handle_btn_e();
       void handle_btn_f();
- 
-   protected:
  
    private:
       double value_x;
