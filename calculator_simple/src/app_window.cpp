@@ -15,6 +15,8 @@
 
 /**
  * @brief   AppWindow Constructor.
+ * 
+ * There is no return from a class constructor method.
  */
 AppWindow::AppWindow():
                     Gtk::Window()
@@ -26,7 +28,10 @@ AppWindow::AppWindow():
                   , layout_buttons()
                   , display_area()
                   , radix_label_obj("b")
-                  , radix_slider_obj(Gtk::Adjustment::create(10, 0, 16, 1, 5, 0), Gtk::ORIENTATION_VERTICAL)
+                  , radix_slider_obj(
+                        Gtk::Adjustment::create(10, 0, 16, 1, 5, 0)
+                      , Gtk::ORIENTATION_VERTICAL
+                    )
                   , btn_num_0_obj("0")
                   , btn_num_1_obj("1")
                   , btn_num_2_obj("2")
@@ -97,7 +102,10 @@ AppWindow::AppWindow():
    radix_slider_obj.set_digits(0);
    radix_slider_obj.set_has_origin(true);
 
-   radix_slider_obj.signal_change_value().connect(sigc::mem_fun(*this, &AppWindow::handle_radix_change), true);
+   radix_slider_obj.signal_change_value().connect(
+      sigc::mem_fun(*this, &AppWindow::handle_radix_change)
+      , true
+   );
 
    layout_buttons.attach(radix_label_obj, 0, 0, 1, 1);
    layout_buttons.attach(radix_slider_obj, 0, 1, 1, 4);
@@ -141,6 +149,8 @@ AppWindow::AppWindow():
 
 /**
  * @brief   AppWindow Destructor.
+ * 
+ * There is no return from a class destructor method.
  */
 AppWindow::~AppWindow()
 {
@@ -148,7 +158,7 @@ AppWindow::~AppWindow()
 
 
 /**
- * @brief   AppWindow Constructor.
+ * @brief   Handler method for the display area redraws.
  */
 void AppWindow::handle_display_update()
 {
@@ -157,9 +167,28 @@ void AppWindow::handle_display_update()
 
 
 /**
- * @brief   AppWindow Constructor.
+ * @brief   Handler method for value changes in the scrollbar.
+ * 
+ * This method is meant to be registered as the callback to handle the change event for radix (base)
+ * selection scrollbar (the `Gtk::Scale` instance). As the scrollbar is moved, the radix (base) for
+ * the calculator is changed to whatever the selection is. To handle this, the calculator buttons'
+ * "sensitive"-ness is changed, which basically registers them as "enabled" (sensitive) or "disabled"
+ * (not sensitive).
+ * 
+ * See the [Gtk::Range](https://developer.gnome.org/gtkmm/stable/classGtk_1_1Range.html) documentation
+ * for details on the `signal_change_value()` method, as well as the
+ * [Gtk::ScrollType enum](https://developer.gnome.org/gtkmm/stable/group__gtkmmEnums.html)
+ * documentation.
+ * 
+ * @param[in] scroll_type  The type of "scrolling" event that triggered this callback.
+ * @param[in] radix_new    The new value after the "scrolling" event, which will be the new radix value.
+ * 
+ * @returns    
  */
-bool AppWindow::handle_radix_change(Gtk::ScrollType const & scroll_type, double const & radix_new)
+bool AppWindow::handle_radix_change(
+        Gtk::ScrollType const & scroll_type
+      , double const & radix_new
+)
 {
    short int count = 0;
    
@@ -306,4 +335,3 @@ void AppWindow::handle_btn_f()
 {
    return;
 }
-
