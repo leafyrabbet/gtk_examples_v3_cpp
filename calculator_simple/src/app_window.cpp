@@ -159,13 +159,15 @@ void AppWindow::handle_display_update()
 /**
  * @brief   AppWindow Constructor.
  */
-bool AppWindow::handle_radix_change(const Gtk::ScrollType & scroll_type, const double & radix_new)
+bool AppWindow::handle_radix_change(Gtk::ScrollType const & scroll_type, double const & radix_new)
 {
    short int count = 0;
    
-   for(const auto & btn_ptr : btn_arr)
+   for (auto const & btn_ptr : btn_arr)
    {
-      btn_ptr->set_sensitive((count <= static_cast<short int>(radix_new)));
+      btn_ptr->set_sensitive(
+         (count <= static_cast<short int>(radix_new))
+      );
       count += 1;
    }
 

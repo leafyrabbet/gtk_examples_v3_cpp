@@ -36,7 +36,7 @@ class AppWindow :
       virtual ~AppWindow();
 
       void handle_display_update();
-      bool handle_radix_change(const Gtk::ScrollType & scroll_type, const double & radix_new);
+      bool handle_radix_change(Gtk::ScrollType const & scroll_type, double const & radix_new);
       void handle_btn_0();
       void handle_btn_1();
       void handle_btn_2();
