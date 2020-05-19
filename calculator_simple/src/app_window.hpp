@@ -103,4 +103,4 @@ class AppWindow :
       std::array<Gtk::Button *, 16> btn_arr;
 };
 
-#endif HPP_APP_WINDOW_HPP
+#endif // HPP_APP_WINDOW_HPP

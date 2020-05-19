@@ -17,4 +17,4 @@ namespace maths
 
 }
 
-#endif HPP_LOGIC_CALCULATOR_HPP
+#endif // HPP_LOGIC_CALCULATOR_HPP
