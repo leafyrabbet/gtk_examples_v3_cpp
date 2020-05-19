@@ -189,7 +189,7 @@ void AppWindow::handle_display_update()
  * @returns    (boolean) Whether this signal should propagate further to other handlers after this.
  */
 bool AppWindow::handle_radix_change(
-        Gtk::ScrollType const & scroll_type
+        Gtk::ScrollType const & // scroll_type
       , double const & radix_new
 )
 {
