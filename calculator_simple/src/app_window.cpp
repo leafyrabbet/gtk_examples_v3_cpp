@@ -12,6 +12,9 @@
 
 #include <iostream>
 
+#define PROPAGATE_SIG true
+#define DO_NOT_PROPAGATE_SIG false
+
 
 /**
  * @brief   AppWindow Constructor.
@@ -183,7 +186,7 @@ void AppWindow::handle_display_update()
  * @param[in] scroll_type  The type of "scrolling" event that triggered this callback.
  * @param[in] radix_new    The new value after the "scrolling" event, which will be the new radix value.
  * 
- * @returns    
+ * @returns    (boolean) Whether this signal should propagate further to other handlers after this.
  */
 bool AppWindow::handle_radix_change(
         Gtk::ScrollType const & scroll_type
@@ -191,7 +194,7 @@ bool AppWindow::handle_radix_change(
 )
 {
    short int count = 0;
-   
+
    for (auto const & btn_ptr : btn_arr)
    {
       btn_ptr->set_sensitive(
@@ -200,7 +203,7 @@ bool AppWindow::handle_radix_change(
       count += 1;
    }
 
-   return (false);
+   return (DO_NOT_PROPAGATE_SIG);
 }
 
 
