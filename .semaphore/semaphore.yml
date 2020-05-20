@@ -13,6 +13,9 @@ blocks:
             - brew install gcc
             - brew install gtk+3
             - brew install gtkmm3
+  - name: Build
+    task:
+      jobs:
         - name: grab_and_build
           commands:
             - checkout
