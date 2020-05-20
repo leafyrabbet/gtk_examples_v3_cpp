@@ -10,7 +10,7 @@ blocks:
       jobs:
         - name: brew_installs
           commands:
-            - brew install gcc-9
+            - brew install gcc
             - brew install gtk+3
             - brew install gtkmm3
   - name: Grab Source
