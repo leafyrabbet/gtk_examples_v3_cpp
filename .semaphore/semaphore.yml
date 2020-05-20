@@ -13,16 +13,10 @@ blocks:
             - brew install gcc
             - brew install gtk+3
             - brew install gtkmm3
-  - name: Grab Source
-    task:
-      jobs:
-        - name: grab
+        - name: grab_and_build
           commands:
             - checkout
-  - name: Build
-    task:
-      jobs:
-        - name: build
-          commands:
-            - cd calculator_simple/build/macos/
+            - ls -alF
+            - ls -alF $SEMAPHORE_GIT_DIR
+            - cd $SEMAPHORE_GIT_DIR/calculator_simple/build/macos/
             - gmake
