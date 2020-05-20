@@ -20,6 +20,5 @@ blocks:
           commands:
             - checkout
             - ls -alF
-            - ls -alF $SEMAPHORE_GIT_DIR
-            - cd $SEMAPHORE_GIT_DIR/calculator_simple/build/macos/
+            - cd ./calculator_simple/build/macos/
             - gmake
