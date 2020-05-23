@@ -1,35 +1,55 @@
-# GNU Make 4.3
+# gtk_examples_v3_cpp/calculator_simple
 # macOS Build Script
+# GNU Make 4.3 (Tested)
 #
+# References:
+# - https://www.rapidtables.com/code/linux/gcc/gcc-o.html
+#
+# Author:
 # Tommy Vegetables (leafyrabbet)
 # leafyrabbet@gmail.com
-# Copyright (c) 2020, TenonGarden Productions
+# 
+# Copyright:
+# TenonGarden Productions (c) 2020
 
-.RECIPEPREFIX = +
+.RECIPEPREFIX = +  # Note: This replaces the `\t` (TAB) character
 
-CC_STD = c++2a
-GCC := gcc-9 --std=$(CC_STD)
-FLAGS = -Wall -Wextra -Werror -pedantic -g
+
+EXE_NAME_BASE ?= calculator_simple
+BINTAG ?=  # _`date +D%Y.%m.%d_T%H.%M.%S_Z%z`
+
+SRC_DIR := ../../src
+
+GCC := gcc-9
+CC_STD = c++2a  # C++20
+COMPILER := $(GCC) --std=$(CC_STD)
+FLG_GDB_DEBUG ?=  # -ggdb3
+FLG_OPTIMIZED ?= -O0
+FLAGS = -Wall \
+         -Wextra \
+         -Werror \
+         -pedantic \
+         $(FLG_OPTIMIZED) \
+         $(FLG_GDB_DEBUG)
+
+COMPILER_WITH_FLAGS := $(COMPILER) $(FLAGS)
 
 LIB_GTKMM = gtkmm-3.0
 LIB_GLIB = glib-2.0
-LIBS :=  -lstdc++ `pkg-config --cflags --libs $(LIB_GTKMM) $(LIB_GLIB)`
-
-BINTAG ?=  # `date +D%Y.%m.%d_T%H.%M.%S_Z%z`
-EXE_NAME_BASE ?= calculator_simple
-
-SRC_DIR := ../../src
+PKG_CONFIG_LIBS := $(LIB_GTKMM) $(LIB_GLIB)
+OTHER_LIBS := -lstdc++
+LIBS := $(OTHER_LIBS) `pkg-config --cflags --libs $(PKG_CONFIG_LIBS)`
 
 .DELETE_ON_ERROR:
 
 .PHONY: all
 all:
-+ $(GCC) $(FLAGS) \
-    -o $(EXE_NAME_BASE)$(BINTAG) \
-    $(SRC_DIR)/app_window.cpp \
-    $(SRC_DIR)/logic_calculator.cpp \
-    $(SRC_DIR)/main.cpp \
-    $(LIBS)
++ $(COMPILER_WITH_FLAGS) \
+   -o $(EXE_NAME_BASE)$(BINTAG) \
+   $(SRC_DIR)/app_window.cpp \
+   $(SRC_DIR)/logic_calculator.cpp \
+   $(SRC_DIR)/main.cpp \
+   $(LIBS)
 + chmod +x $(EXE_NAME_BASE)$(BINTAG)
 
 .PHONY: clean
