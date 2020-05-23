@@ -23,6 +23,8 @@
 #include <gtkmm/scale.h>
 #include <gtkmm/button.h>
 
+#include <cairomm/context.h>
+
 #include <array>
 
 #include "logic_calculator.hpp"
@@ -36,7 +38,9 @@ class AppWindow :
       virtual ~AppWindow();
  
    protected:
-      void handle_display_update();
+      bool handle_display_update(
+            ::Cairo::RefPtr<::Cairo::Context> const & draw_context_ptr
+      );
       
       bool handle_radix_change(
               Gtk::ScrollType const & scroll_type
@@ -70,6 +74,7 @@ class AppWindow :
       Gtk::Grid layout_buttons;
 
       Gtk::DrawingArea display_area;
+      Gtk::Allocation display_area_allocation;
 
       Gtk::Label radix_label_obj;
       Gtk::Scale radix_slider_obj;

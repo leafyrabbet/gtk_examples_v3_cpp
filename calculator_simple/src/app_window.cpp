@@ -140,6 +140,9 @@ AppWindow::AppWindow():
    layout_buttons.attach(btn_alt_dot_obj, 1, 4, 1, 1);
    layout_buttons.attach(btn_alt_inv_obj, 4, 4, 1, 1);
 
+
+   display_area.signal_draw().connect(sigc::mem_fun(*this, &AppWindow::handle_display_update), false);
+
    layout_display.pack_start(display_area);
 
    layout_main.pack_start(layout_display);
@@ -163,9 +166,34 @@ AppWindow::~AppWindow()
 /**
  * @brief   Handler method for the display area redraws.
  */
-void AppWindow::handle_display_update()
+bool AppWindow::handle_display_update(
+   ::Cairo::RefPtr<::Cairo::Context> const & draw_context_ptr
+)
 {
-   return;
+   display_area_allocation = display_area.get_allocation();
+   int const area_x_full = display_area_allocation.get_width();
+   int const area_y_full = display_area_allocation.get_height();
+
+   int const top_left_x = (0);
+   int const top_left_y = (0);
+
+   int const center_x = (area_x_full / 2);
+   int const center_y = (area_y_full / 2);
+
+   int const bot_rght_x = (area_x_full);
+   int const bot_rght_y = (area_y_full);
+
+
+   draw_context_ptr->set_line_width(10.0);
+   draw_context_ptr->set_source_rgb(0.8, 0.0, 0.0);
+   draw_context_ptr->move_to(top_left_x, top_left_y);
+   draw_context_ptr->line_to(center_x, center_y);
+   draw_context_ptr->line_to(top_left_x, bot_rght_y);
+   draw_context_ptr->move_to(center_x, center_y);
+   draw_context_ptr->line_to(bot_rght_x, center_y);
+   draw_context_ptr->stroke();
+
+   return PROPAGATE_SIG; // Should propagate to make sure save/restore are processed correctly.
 }
 
 
