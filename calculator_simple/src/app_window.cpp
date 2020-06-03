@@ -26,8 +26,8 @@ AppWindow::AppWindow():
                   , value_x(0.0)
                   , value_y(0.0)
                   , value_z(0.0)
-                  , layout_main()
-                  , layout_display()
+                  , layout_main(Gtk::ORIENTATION_VERTICAL)
+                  , layout_display(Gtk::ORIENTATION_VERTICAL)
                   , layout_buttons()
                   , display_area()
                   , radix_label_obj("b")
@@ -76,6 +76,7 @@ AppWindow::AppWindow():
                      , &btn_num_e_obj
                      , &btn_num_f_obj
                   }}
+                  , txt_str_top("")
 {
    set_title("Simple Calculator");
 
@@ -140,7 +141,7 @@ AppWindow::AppWindow():
    layout_buttons.attach(btn_alt_dot_obj, 1, 4, 1, 1);
    layout_buttons.attach(btn_alt_inv_obj, 4, 4, 1, 1);
 
-
+   display_area.set_size_request(360, 120);
    display_area.signal_draw().connect(sigc::mem_fun(*this, &AppWindow::handle_display_update), false);
 
    layout_display.pack_start(display_area);
@@ -172,23 +173,23 @@ bool AppWindow::handle_display_update(
 {
    display_area_allocation = display_area.get_allocation();
    int const area_x_full = display_area_allocation.get_width();
-   int const area_y_full = display_area_allocation.get_height();
+   // int const area_y_full = display_area_allocation.get_height();
 
-   int const lft_x = (0);
-   int const top_y = (0);
+   // int const lft_x = (0);
+   // int const top_y = (0);
 
-   int const center_x = (area_x_full / 2);
-   int const center_y = (area_y_full / 2);
+   // int const center_x = (area_x_full / 2);
+   // int const center_y = (area_y_full / 2);
 
-   // int const rght_x = (area_x_full);
-   int const bot_y = (area_y_full);
+   // // int const rght_x = (area_x_full);
+   // int const bot_y = (area_y_full);
 
-   draw_context_ptr->set_line_width(10.0);
-   draw_context_ptr->set_source_rgb(0.8, 0.0, 0.5);
-   draw_context_ptr->move_to(lft_x, top_y);
-   draw_context_ptr->line_to(center_x, center_y);
-   draw_context_ptr->line_to(lft_x, bot_y);
-   draw_context_ptr->stroke();
+   // draw_context_ptr->set_line_width(10.0);
+   // draw_context_ptr->set_source_rgb(0.8, 0.0, 0.5);
+   // draw_context_ptr->move_to(lft_x, top_y);
+   // draw_context_ptr->line_to(center_x, center_y);
+   // draw_context_ptr->line_to(lft_x, bot_y);
+   // draw_context_ptr->stroke();
 
    Pango::FontDescription font;
 
@@ -196,7 +197,7 @@ bool AppWindow::handle_display_update(
    font.set_weight(Pango::WEIGHT_BOLD);
 
    // http://developer.gnome.org/pangomm/unstable/classPango_1_1Layout.html
-   auto layout = create_pango_layout("Calculator Test");
+   auto layout = create_pango_layout(txt_str_top.c_str());
 
    layout->set_font_description(font);
 
@@ -261,9 +262,9 @@ bool AppWindow::handle_radix_change(
  */
 void AppWindow::handle_btn_0()
 {
-   std::cout
-         << "Yo!"
-         << std::endl;
+   txt_str_top.append("0");
+
+   display_area.queue_draw();
 
    return;
 }
@@ -273,6 +274,10 @@ void AppWindow::handle_btn_0()
  */
 void AppWindow::handle_btn_1()
 {
+   txt_str_top.append("1");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -281,6 +286,10 @@ void AppWindow::handle_btn_1()
  */
 void AppWindow::handle_btn_2()
 {
+   txt_str_top.append("2");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -289,6 +298,10 @@ void AppWindow::handle_btn_2()
  */
 void AppWindow::handle_btn_3()
 {
+   txt_str_top.append("3");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -297,6 +310,10 @@ void AppWindow::handle_btn_3()
  */
 void AppWindow::handle_btn_4()
 {
+   txt_str_top.append("4");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -305,6 +322,10 @@ void AppWindow::handle_btn_4()
  */
 void AppWindow::handle_btn_5()
 {
+   txt_str_top.append("5");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -313,14 +334,10 @@ void AppWindow::handle_btn_5()
  */
 void AppWindow::handle_btn_6()
 {
-   return;
-}
+   txt_str_top.append("6");
 
-/**
- * @brief      { item_description }
- */
-void AppWindow::handle_btn_8()
-{
+   display_area.queue_draw();
+
    return;
 }
 
@@ -329,6 +346,22 @@ void AppWindow::handle_btn_8()
  */
 void AppWindow::handle_btn_7()
 {
+   txt_str_top.append("7");
+
+   display_area.queue_draw();
+
+   return;
+}
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_btn_8()
+{
+   txt_str_top.append("8");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -337,6 +370,10 @@ void AppWindow::handle_btn_7()
  */
 void AppWindow::handle_btn_9()
 {
+   txt_str_top.append("9");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -345,6 +382,10 @@ void AppWindow::handle_btn_9()
  */
 void AppWindow::handle_btn_a()
 {
+   txt_str_top.append("A");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -353,6 +394,10 @@ void AppWindow::handle_btn_a()
  */
 void AppWindow::handle_btn_b()
 {
+   txt_str_top.append("B");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -361,6 +406,10 @@ void AppWindow::handle_btn_b()
  */
 void AppWindow::handle_btn_c()
 {
+   txt_str_top.append("C");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -369,6 +418,10 @@ void AppWindow::handle_btn_c()
  */
 void AppWindow::handle_btn_d()
 {
+   txt_str_top.append("D");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -377,6 +430,10 @@ void AppWindow::handle_btn_d()
  */
 void AppWindow::handle_btn_e()
 {
+   txt_str_top.append("E");
+
+   display_area.queue_draw();
+
    return;
 }
 
@@ -385,5 +442,9 @@ void AppWindow::handle_btn_e()
  */
 void AppWindow::handle_btn_f()
 {
+   txt_str_top.append("F");
+
+   display_area.queue_draw();
+
    return;
 }

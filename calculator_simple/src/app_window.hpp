@@ -30,6 +30,7 @@
 #include <pangomm/layout.h>
 
 #include <array>
+#include <string>
 
 #include "logic_calculator.hpp"
 
@@ -110,6 +111,9 @@ class AppWindow :
       Gtk::Button btn_alt_inv_obj;
 
       std::array<Gtk::Button *, 16> btn_arr;
+
+      std::string txt_str_top;
+      // std::string txt_str_bot;
 };
 
 #endif // HPP_APP_WINDOW_HPP
