@@ -37,7 +37,8 @@ COMPILER_WITH_FLAGS := $(COMPILER) $(FLAGS)
 LIB_GTKMM = gtkmm-3.0
 LIB_GLIB = glib-2.0
 LIB_CAIRO = cairomm-1.0
-PKG_CONFIG_LIBS := $(LIB_GTKMM) $(LIB_GLIB) $(LIB_CAIRO)
+LIB_PANGO = pangomm-1.4
+PKG_CONFIG_LIBS := $(LIB_GTKMM) $(LIB_GLIB) $(LIB_CAIRO) $(LIB_PANGO)
 OTHER_LIBS := -lstdc++
 LIBS := $(OTHER_LIBS) `pkg-config --cflags --libs $(PKG_CONFIG_LIBS)`
 

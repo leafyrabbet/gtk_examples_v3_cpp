@@ -174,24 +174,45 @@ bool AppWindow::handle_display_update(
    int const area_x_full = display_area_allocation.get_width();
    int const area_y_full = display_area_allocation.get_height();
 
-   int const top_left_x = (0);
-   int const top_left_y = (0);
+   int const lft_x = (0);
+   int const top_y = (0);
 
    int const center_x = (area_x_full / 2);
    int const center_y = (area_y_full / 2);
 
-   int const bot_rght_x = (area_x_full);
-   int const bot_rght_y = (area_y_full);
-
+   // int const rght_x = (area_x_full);
+   int const bot_y = (area_y_full);
 
    draw_context_ptr->set_line_width(10.0);
-   draw_context_ptr->set_source_rgb(0.8, 0.0, 0.0);
-   draw_context_ptr->move_to(top_left_x, top_left_y);
+   draw_context_ptr->set_source_rgb(0.8, 0.0, 0.5);
+   draw_context_ptr->move_to(lft_x, top_y);
    draw_context_ptr->line_to(center_x, center_y);
-   draw_context_ptr->line_to(top_left_x, bot_rght_y);
-   draw_context_ptr->move_to(center_x, center_y);
-   draw_context_ptr->line_to(bot_rght_x, center_y);
+   draw_context_ptr->line_to(lft_x, bot_y);
    draw_context_ptr->stroke();
+
+   Pango::FontDescription font;
+
+   font.set_family("Monospace");
+   font.set_weight(Pango::WEIGHT_BOLD);
+
+   // http://developer.gnome.org/pangomm/unstable/classPango_1_1Layout.html
+   auto layout = create_pango_layout("Calculator Test");
+
+   layout->set_font_description(font);
+
+   int text_width;
+   int text_height;
+
+   //get the text dimensions (it updates the variables -- by reference)
+   layout->get_pixel_size(text_width, text_height);
+
+   // Position the text in the middle
+   draw_context_ptr->move_to(
+        (area_x_full - text_width)
+      , (1.5 * text_height)
+   );
+
+   layout->show_in_cairo_context(draw_context_ptr);
 
    return PROPAGATE_SIG; // Should propagate to make sure save/restore are processed correctly.
 }

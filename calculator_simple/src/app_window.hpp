@@ -25,6 +25,10 @@
 
 #include <cairomm/context.h>
 
+#include <pangomm/fontdescription.h>
+#include <pangomm/fontface.h>
+#include <pangomm/layout.h>
+
 #include <array>
 
 #include "logic_calculator.hpp"
