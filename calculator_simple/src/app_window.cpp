@@ -77,6 +77,9 @@ AppWindow::AppWindow():
                      , &btn_num_f_obj
                   }}
                   , txt_str_top("")
+                  , txt_str_bot("")
+                  , txt_str_opr("")
+                  , txt_str_res("")
 {
    set_title("Simple Calculator");
 
@@ -166,6 +169,10 @@ AppWindow::~AppWindow()
 
 /**
  * @brief   Handler method for the display area redraws.
+ * 
+ * References:
+ * - http://developer.gnome.org/pangomm/unstable/classPango_1_1Layout.html
+ * 
  */
 bool AppWindow::handle_display_update(
    ::Cairo::RefPtr<::Cairo::Context> const & draw_context_ptr
@@ -175,45 +182,66 @@ bool AppWindow::handle_display_update(
    int const area_x_full = display_area_allocation.get_width();
    // int const area_y_full = display_area_allocation.get_height();
 
-   // int const lft_x = (0);
-   // int const top_y = (0);
-
-   // int const center_x = (area_x_full / 2);
-   // int const center_y = (area_y_full / 2);
-
-   // // int const rght_x = (area_x_full);
-   // int const bot_y = (area_y_full);
-
-   // draw_context_ptr->set_line_width(10.0);
-   // draw_context_ptr->set_source_rgb(0.8, 0.0, 0.5);
-   // draw_context_ptr->move_to(lft_x, top_y);
-   // draw_context_ptr->line_to(center_x, center_y);
-   // draw_context_ptr->line_to(lft_x, bot_y);
-   // draw_context_ptr->stroke();
-
    Pango::FontDescription font;
-
    font.set_family("Monospace");
-   font.set_weight(Pango::WEIGHT_BOLD);
+   font.set_weight(Pango::WEIGHT_NORMAL);
 
-   // http://developer.gnome.org/pangomm/unstable/classPango_1_1Layout.html
-   auto layout = create_pango_layout(txt_str_top.c_str());
+   auto top_txt_layout = create_pango_layout(txt_str_top.c_str());
+   top_txt_layout->set_font_description(font);
 
-   layout->set_font_description(font);
+   auto bot_txt_layout = create_pango_layout(txt_str_bot.c_str());
+   bot_txt_layout->set_font_description(font);
 
-   int text_width;
-   int text_height;
+   auto opr_txt_layout = create_pango_layout(txt_str_opr.c_str());
+   opr_txt_layout->set_font_description(font);
 
-   //get the text dimensions (it updates the variables -- by reference)
-   layout->get_pixel_size(text_width, text_height);
+   auto res_txt_layout = create_pango_layout(txt_str_res.c_str());
+   res_txt_layout->set_font_description(font);
 
-   // Position the text in the middle
+   int top_txt_width;
+   int top_txt_height;
+   int bot_txt_width;
+   int bot_txt_height;
+   int opr_txt_width;
+   int opr_txt_height;
+   int res_txt_width;
+   int res_txt_height;
+
+   top_txt_layout->get_pixel_size(top_txt_width, top_txt_height);
+   float const pen_x_top_txt = (area_x_full - top_txt_width);
+   float const pen_y_top_txt = (1.5 * top_txt_height);
    draw_context_ptr->move_to(
-        (area_x_full - text_width)
-      , (1.5 * text_height)
+        pen_x_top_txt
+      , pen_y_top_txt
    );
+   top_txt_layout->show_in_cairo_context(draw_context_ptr);
 
-   layout->show_in_cairo_context(draw_context_ptr);
+   opr_txt_layout->get_pixel_size(opr_txt_width, opr_txt_height);
+   float const pen_x_opr_txt = (1.5 * opr_txt_width);
+   float const pen_y_opr_txt = (pen_y_top_txt + (1.5 * opr_txt_height));
+   draw_context_ptr->move_to(
+        pen_x_opr_txt
+      , pen_y_opr_txt
+   );
+   opr_txt_layout->show_in_cairo_context(draw_context_ptr);
+
+   bot_txt_layout->get_pixel_size(bot_txt_width, bot_txt_height);
+   float const pen_x_bot_txt = (area_x_full - bot_txt_width);
+   float const pen_y_bot_txt = (pen_y_opr_txt + (1.5 * bot_txt_height));
+   draw_context_ptr->move_to(
+        pen_x_bot_txt
+      , pen_y_bot_txt
+   );
+   bot_txt_layout->show_in_cairo_context(draw_context_ptr);
+
+   res_txt_layout->get_pixel_size(res_txt_width, res_txt_height);
+   float const pen_x_res_txt = (area_x_full - res_txt_width);
+   float const pen_y_res_txt = (pen_y_bot_txt + (2.5 * res_txt_height));
+   draw_context_ptr->move_to(
+        pen_x_res_txt
+      , pen_y_res_txt
+   );
+   res_txt_layout->show_in_cairo_context(draw_context_ptr);
 
    return PROPAGATE_SIG; // Should propagate to make sure save/restore are processed correctly.
 }

@@ -113,7 +113,9 @@ class AppWindow :
       std::array<Gtk::Button *, 16> btn_arr;
 
       std::string txt_str_top;
-      // std::string txt_str_bot;
+      std::string txt_str_bot;
+      std::string txt_str_opr;
+      std::string txt_str_res;
 };
 
 #endif // HPP_APP_WINDOW_HPP
