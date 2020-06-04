@@ -80,6 +80,7 @@ AppWindow::AppWindow():
                   , txt_str_bot("")
                   , txt_str_opr("")
                   , txt_str_res("")
+                  , crnt_mode{CALC_MODE::ARG_A}
 {
    set_title("Simple Calculator");
 
@@ -100,11 +101,11 @@ AppWindow::AppWindow():
    btn_num_e_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_btn_e), false);
    btn_num_f_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_btn_f), false);
 
-   // btn_op_add_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_add));
-   // btn_op_sub_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_sub));
-   // btn_op_mul_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_mul));
-   // btn_op_div_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_div));
-   // btn_op_mod_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_mod));
+   btn_op_add_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_add), false);
+   btn_op_sub_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_sub), false);
+   btn_op_mul_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_mul), false);
+   btn_op_div_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_div), false);
+   btn_op_mod_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_mod), false);
 
    radix_slider_obj.set_digits(0);
    radix_slider_obj.set_has_origin(true);
@@ -144,7 +145,7 @@ AppWindow::AppWindow():
    layout_buttons.attach(btn_alt_dot_obj, 1, 4, 1, 1);
    layout_buttons.attach(btn_alt_inv_obj, 4, 4, 1, 1);
 
-   display_area.set_size_request(360, 120);
+   display_area.set_size_request(25, 120);
    display_area.signal_draw().connect(sigc::mem_fun(*this, &AppWindow::handle_display_update), false);
 
    layout_display.pack_start(display_area);
@@ -288,11 +289,43 @@ bool AppWindow::handle_radix_change(
 /**
  * @brief      { item_description }
  */
-void AppWindow::handle_btn_0()
+void AppWindow::write_digit(char const * digit_str)
 {
-   txt_str_top.append("0");
+   switch (crnt_mode)
+   {
+      case (CALC_MODE::ARG_A):
+      {
+         txt_str_top.append(digit_str);
+      }
+      break;
+
+      case (CALC_MODE::ARG_B):
+      {
+         txt_str_bot.append(digit_str);
+      }
+      break;
+      
+      case (CALC_MODE::SOLVE):
+      {}
+      break;
+
+      default:
+      {}
+      break;
+   }
 
    display_area.queue_draw();
+
+   return;
+}
+
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_btn_0()
+{
+   write_digit("0");
 
    return;
 }
@@ -302,9 +335,7 @@ void AppWindow::handle_btn_0()
  */
 void AppWindow::handle_btn_1()
 {
-   txt_str_top.append("1");
-
-   display_area.queue_draw();
+   write_digit("1");
 
    return;
 }
@@ -314,9 +345,7 @@ void AppWindow::handle_btn_1()
  */
 void AppWindow::handle_btn_2()
 {
-   txt_str_top.append("2");
-
-   display_area.queue_draw();
+   write_digit("2");
 
    return;
 }
@@ -326,9 +355,7 @@ void AppWindow::handle_btn_2()
  */
 void AppWindow::handle_btn_3()
 {
-   txt_str_top.append("3");
-
-   display_area.queue_draw();
+   write_digit("3");
 
    return;
 }
@@ -338,9 +365,7 @@ void AppWindow::handle_btn_3()
  */
 void AppWindow::handle_btn_4()
 {
-   txt_str_top.append("4");
-
-   display_area.queue_draw();
+   write_digit("4");
 
    return;
 }
@@ -350,9 +375,7 @@ void AppWindow::handle_btn_4()
  */
 void AppWindow::handle_btn_5()
 {
-   txt_str_top.append("5");
-
-   display_area.queue_draw();
+   write_digit("5");
 
    return;
 }
@@ -362,9 +385,7 @@ void AppWindow::handle_btn_5()
  */
 void AppWindow::handle_btn_6()
 {
-   txt_str_top.append("6");
-
-   display_area.queue_draw();
+   write_digit("6");
 
    return;
 }
@@ -374,9 +395,7 @@ void AppWindow::handle_btn_6()
  */
 void AppWindow::handle_btn_7()
 {
-   txt_str_top.append("7");
-
-   display_area.queue_draw();
+   write_digit("7");
 
    return;
 }
@@ -386,9 +405,7 @@ void AppWindow::handle_btn_7()
  */
 void AppWindow::handle_btn_8()
 {
-   txt_str_top.append("8");
-
-   display_area.queue_draw();
+   write_digit("8");
 
    return;
 }
@@ -398,9 +415,7 @@ void AppWindow::handle_btn_8()
  */
 void AppWindow::handle_btn_9()
 {
-   txt_str_top.append("9");
-
-   display_area.queue_draw();
+   write_digit("9");
 
    return;
 }
@@ -410,9 +425,7 @@ void AppWindow::handle_btn_9()
  */
 void AppWindow::handle_btn_a()
 {
-   txt_str_top.append("A");
-
-   display_area.queue_draw();
+   write_digit("A");
 
    return;
 }
@@ -422,9 +435,7 @@ void AppWindow::handle_btn_a()
  */
 void AppWindow::handle_btn_b()
 {
-   txt_str_top.append("B");
-
-   display_area.queue_draw();
+   write_digit("B");
 
    return;
 }
@@ -434,9 +445,7 @@ void AppWindow::handle_btn_b()
  */
 void AppWindow::handle_btn_c()
 {
-   txt_str_top.append("C");
-
-   display_area.queue_draw();
+   write_digit("C");
 
    return;
 }
@@ -446,9 +455,7 @@ void AppWindow::handle_btn_c()
  */
 void AppWindow::handle_btn_d()
 {
-   txt_str_top.append("D");
-
-   display_area.queue_draw();
+   write_digit("D");
 
    return;
 }
@@ -458,9 +465,7 @@ void AppWindow::handle_btn_d()
  */
 void AppWindow::handle_btn_e()
 {
-   txt_str_top.append("E");
-
-   display_area.queue_draw();
+   write_digit("E");
 
    return;
 }
@@ -470,7 +475,124 @@ void AppWindow::handle_btn_e()
  */
 void AppWindow::handle_btn_f()
 {
-   txt_str_top.append("F");
+   write_digit("F");
+
+   return;
+}
+
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::determine_mode(char const *) // UNUSED ARGUMENT
+{
+   switch (crnt_mode)
+   {
+      case (CALC_MODE::ARG_A):
+      {
+         crnt_mode = CALC_MODE::ARG_B;
+      }
+      break;
+
+      case (CALC_MODE::ARG_B):
+      {
+         crnt_mode = CALC_MODE::SOLVE;
+      }
+      break;
+      
+      case (CALC_MODE::SOLVE):
+      {
+         crnt_mode = CALC_MODE::SOLVE;
+      }
+      break;
+
+      default:
+      {}
+      break;
+   }
+
+   return;
+}
+
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_op_add()
+{
+   char const * add_op = "+\0";
+
+   txt_str_opr = (add_op);
+
+   determine_mode(add_op);
+
+   display_area.queue_draw();
+
+   return;
+}
+
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_op_sub()
+{
+   char const * sub_op = "-\0";
+
+   txt_str_opr = (sub_op);
+
+   determine_mode(sub_op);
+
+   display_area.queue_draw();
+
+   return;
+}
+
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_op_mul()
+{
+   char const * mul_op = "x\0";
+
+   txt_str_opr = (mul_op);
+
+   determine_mode(mul_op);
+
+   display_area.queue_draw();
+
+   return;
+}
+
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_op_div()
+{
+   char const * div_op = "/\0";
+
+   txt_str_opr = (div_op);
+
+   determine_mode(div_op);
+
+   display_area.queue_draw();
+
+   return;
+}
+
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_op_mod()
+{
+   char const * mod_op = "%\0";
+
+   txt_str_opr = (mod_op);
+
+   determine_mode(mod_op);
 
    display_area.queue_draw();
 

@@ -35,6 +35,13 @@
 #include "logic_calculator.hpp"
 
 
+enum class CALC_MODE {
+     ARG_A = 0
+   , ARG_B = 1
+   , SOLVE = 2
+};
+
+
 class AppWindow :
               public Gtk::Window
 {
@@ -51,6 +58,8 @@ class AppWindow :
               Gtk::ScrollType const & scroll_type
             , double const & radix_new
       );
+
+      void write_digit(char const * digit_str);
       
       void handle_btn_0();
       void handle_btn_1();
@@ -68,6 +77,14 @@ class AppWindow :
       void handle_btn_d();
       void handle_btn_e();
       void handle_btn_f();
+
+      void determine_mode(char const *); // UNUSED ARGUMENT
+
+      void handle_op_add();
+      void handle_op_sub();
+      void handle_op_mul();
+      void handle_op_div();
+      void handle_op_mod();
  
    private:
       double value_x;
@@ -107,6 +124,8 @@ class AppWindow :
       Gtk::Button btn_op_div_obj;
       Gtk::Button btn_op_mod_obj;
 
+      Gtk::Button btn_solve_obj;
+
       Gtk::Button btn_alt_dot_obj;
       Gtk::Button btn_alt_inv_obj;
 
@@ -116,6 +135,8 @@ class AppWindow :
       std::string txt_str_bot;
       std::string txt_str_opr;
       std::string txt_str_res;
+
+      CALC_MODE crnt_mode;
 };
 
 #endif // HPP_APP_WINDOW_HPP
