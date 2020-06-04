@@ -48,7 +48,7 @@ class AppWindow :
 {
    public:
       AppWindow();
-      virtual ~AppWindow();
+      virtual ~AppWindow() =default;
  
    protected:
       bool handle_display_update(
@@ -78,7 +78,6 @@ class AppWindow :
       void handle_btn_d();
       void handle_btn_e();
       void handle_btn_f();
-      void handle_dot();
 
       void determine_mode(char const *); // UNUSED ARGUMENT
 
@@ -129,9 +128,6 @@ class AppWindow :
       Gtk::Button btn_op_mod_obj;
 
       Gtk::Button btn_solve_obj;
-
-      Gtk::Button btn_alt_dot_obj;
-      Gtk::Button btn_alt_inv_obj;
 
       std::array<Gtk::Button *, 16> btn_arr;
 

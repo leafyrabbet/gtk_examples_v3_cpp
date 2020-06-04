@@ -33,7 +33,7 @@ AppWindow::AppWindow():
                   , display_area()
                   , radix_label_obj("b")
                   , radix_slider_obj(
-                        Gtk::Adjustment::create(10, 0, 16, 1, 5, 0)
+                        Gtk::Adjustment::create(10, 0, 16, 1, 0, 0)
                       , Gtk::ORIENTATION_VERTICAL
                     )
                   , btn_num_0_obj("0")
@@ -58,8 +58,6 @@ AppWindow::AppWindow():
                   , btn_op_div_obj("/")
                   , btn_op_mod_obj("%")
                   , btn_solve_obj("=")
-                  , btn_alt_dot_obj(".")
-                  , btn_alt_inv_obj("1/x")
                   , btn_arr{{
                        &btn_num_0_obj
                      , &btn_num_1_obj
@@ -102,8 +100,6 @@ AppWindow::AppWindow():
    btn_num_d_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_btn_d), false);
    btn_num_e_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_btn_e), false);
    btn_num_f_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_btn_f), false);
-   
-   btn_alt_dot_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_dot), false);
 
    btn_op_add_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_add), false);
    btn_op_sub_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_sub), false);
@@ -113,13 +109,24 @@ AppWindow::AppWindow():
 
    btn_solve_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_solve), false);
 
-   radix_slider_obj.set_digits(0);
-   radix_slider_obj.set_has_origin(true);
+   radix_slider_obj.set_digits(1);
+   radix_slider_obj.set_round_digits(1);
+   radix_slider_obj.set_has_origin(false);
 
    radix_slider_obj.signal_change_value().connect(
       sigc::mem_fun(*this, &AppWindow::handle_radix_change)
       , true
    );
+
+   short int count = 0;
+
+   for (auto const & btn_ptr : btn_arr)
+   {
+      btn_ptr->set_sensitive(
+         (count < 10)
+      );
+      count += 1;
+   }
 
    layout_buttons.attach(radix_label_obj, 0, 0, 1, 1);
    layout_buttons.attach(radix_slider_obj, 0, 1, 1, 4);
@@ -128,29 +135,27 @@ AppWindow::AppWindow():
    layout_buttons.attach(btn_num_1_obj, 2, 0, 1, 1);
    layout_buttons.attach(btn_num_2_obj, 3, 0, 1, 1);
    layout_buttons.attach(btn_num_3_obj, 4, 0, 1, 1);
-   layout_buttons.attach(btn_op_add_obj, 5, 0, 2, 1);
+   layout_buttons.attach(btn_op_add_obj, 5, 0, 1, 1);
 
    layout_buttons.attach(btn_num_4_obj, 1, 1, 1, 1);
    layout_buttons.attach(btn_num_5_obj, 2, 1, 1, 1);
    layout_buttons.attach(btn_num_6_obj, 3, 1, 1, 1);
    layout_buttons.attach(btn_num_7_obj, 4, 1, 1, 1);
-   layout_buttons.attach(btn_op_sub_obj, 5, 1, 2, 1);
+   layout_buttons.attach(btn_op_sub_obj, 5, 1, 1, 1);
 
    layout_buttons.attach(btn_num_8_obj, 1, 2, 1, 1);
    layout_buttons.attach(btn_num_9_obj, 2, 2, 1, 1);
    layout_buttons.attach(btn_num_a_obj, 3, 2, 1, 1);
    layout_buttons.attach(btn_num_b_obj, 4, 2, 1, 1);
-   layout_buttons.attach(btn_op_mul_obj, 5, 2, 2, 1);
+   layout_buttons.attach(btn_op_mul_obj, 5, 2, 1, 1);
 
    layout_buttons.attach(btn_num_c_obj, 1, 3, 1, 1);
    layout_buttons.attach(btn_num_d_obj, 2, 3, 1, 1);
    layout_buttons.attach(btn_num_e_obj, 3, 3, 1, 1);
    layout_buttons.attach(btn_num_f_obj, 4, 3, 1, 1);
-   layout_buttons.attach(btn_op_div_obj, 5, 3, 2, 1);
+   layout_buttons.attach(btn_op_div_obj, 5, 3, 1, 1);
 
-   layout_buttons.attach(btn_alt_dot_obj, 1, 4, 1, 1);
-   layout_buttons.attach(btn_alt_inv_obj, 4, 4, 1, 1);
-   layout_buttons.attach(btn_solve_obj, 5, 4, 1, 1);
+   layout_buttons.attach(btn_solve_obj, 4, 4, 1, 1);
 
    display_area.set_size_request(25, 120);
    display_area.signal_draw().connect(sigc::mem_fun(*this, &AppWindow::handle_display_update), false);
@@ -163,15 +168,6 @@ AppWindow::AppWindow():
    add(layout_main);
 
    show_all_children();
-}
-
-/**
- * @brief   AppWindow Destructor.
- * 
- * There is no return from a class destructor method.
- */
-AppWindow::~AppWindow()
-{
 }
 
 
@@ -284,7 +280,7 @@ bool AppWindow::handle_radix_change(
    for (auto const & btn_ptr : btn_arr)
    {
       btn_ptr->set_sensitive(
-         (count <= static_cast<short int>(radix_new))
+         (count < static_cast<short int>(radix_new))
       );
       count += 1;
    }
@@ -495,16 +491,6 @@ void AppWindow::handle_btn_e()
 void AppWindow::handle_btn_f()
 {
    write_digit("F");
-
-   return;
-}
-
-/**
- * @brief      { item_description }
- */
-void AppWindow::handle_dot()
-{
-   write_digit(".");
 
    return;
 }
