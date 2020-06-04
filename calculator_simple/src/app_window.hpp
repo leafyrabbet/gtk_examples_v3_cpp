@@ -39,6 +39,7 @@ enum class CALC_MODE {
      ARG_A = 0
    , ARG_B = 1
    , SOLVE = 2
+   , AFTER = 3
 };
 
 
@@ -77,6 +78,7 @@ class AppWindow :
       void handle_btn_d();
       void handle_btn_e();
       void handle_btn_f();
+      void handle_dot();
 
       void determine_mode(char const *); // UNUSED ARGUMENT
 
@@ -85,6 +87,8 @@ class AppWindow :
       void handle_op_mul();
       void handle_op_div();
       void handle_op_mod();
+
+      void handle_solve();
  
    private:
       double value_x;

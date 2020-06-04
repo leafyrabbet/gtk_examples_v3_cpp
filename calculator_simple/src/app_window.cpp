@@ -10,6 +10,7 @@
 
 #include "app_window.hpp"
 
+#include <charconv>
 #include <iostream>
 
 #define PROPAGATE_SIG true
@@ -56,6 +57,7 @@ AppWindow::AppWindow():
                   , btn_op_mul_obj("*")
                   , btn_op_div_obj("/")
                   , btn_op_mod_obj("%")
+                  , btn_solve_obj("=")
                   , btn_alt_dot_obj(".")
                   , btn_alt_inv_obj("1/x")
                   , btn_arr{{
@@ -100,12 +102,16 @@ AppWindow::AppWindow():
    btn_num_d_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_btn_d), false);
    btn_num_e_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_btn_e), false);
    btn_num_f_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_btn_f), false);
+   
+   btn_alt_dot_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_dot), false);
 
    btn_op_add_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_add), false);
    btn_op_sub_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_sub), false);
    btn_op_mul_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_mul), false);
    btn_op_div_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_div), false);
    btn_op_mod_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_op_mod), false);
+
+   btn_solve_obj.signal_clicked().connect(sigc::mem_fun(*this, &AppWindow::handle_solve), false);
 
    radix_slider_obj.set_digits(0);
    radix_slider_obj.set_has_origin(true);
@@ -144,6 +150,7 @@ AppWindow::AppWindow():
 
    layout_buttons.attach(btn_alt_dot_obj, 1, 4, 1, 1);
    layout_buttons.attach(btn_alt_inv_obj, 4, 4, 1, 1);
+   layout_buttons.attach(btn_solve_obj, 5, 4, 1, 1);
 
    display_area.set_size_request(25, 120);
    display_area.signal_draw().connect(sigc::mem_fun(*this, &AppWindow::handle_display_update), false);
@@ -307,6 +314,18 @@ void AppWindow::write_digit(char const * digit_str)
       
       case (CALC_MODE::SOLVE):
       {}
+      break;
+      
+      case (CALC_MODE::AFTER):
+      {
+         txt_str_top.clear();
+         txt_str_opr.clear();
+         txt_str_bot.clear();
+         txt_str_res.clear();
+
+         txt_str_top.append(digit_str);
+         crnt_mode = CALC_MODE::ARG_A;
+      }
       break;
 
       default:
@@ -480,6 +499,95 @@ void AppWindow::handle_btn_f()
    return;
 }
 
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_dot()
+{
+   write_digit(".");
+
+   return;
+}
+
+/**
+ * @brief      { item_description }
+ */
+void AppWindow::handle_solve()
+{
+   int a;
+   int b;
+   int c;
+
+   int r = static_cast<int>(radix_slider_obj.get_value());
+
+   std::cout
+      << "r: "
+      << r
+      << std::endl;
+
+   std::from_chars(txt_str_top.c_str(), txt_str_top.data() + txt_str_top.size(), a, r);
+   std::from_chars(txt_str_bot.c_str(), txt_str_bot.data() + txt_str_bot.size(), b, r);
+
+   std::cout
+      << "a: "
+      << a
+      << std::endl;
+
+   std::cout
+      << "b: "
+      << b
+      << std::endl;
+
+    std::array<char, 150> result{'\0'};
+
+   if (txt_str_opr == "+")
+   {
+      c = a + b;
+   }
+   else if (txt_str_opr == "-")
+   {
+      c = a - b;
+   }
+   else if (txt_str_opr == "x")
+   {
+      c = a * b;
+   }
+   else if (txt_str_opr == "/")
+   {
+      c = a / b;
+   }
+   else if (txt_str_opr == "%")
+   {
+      c = a % b;
+   }
+   else
+   {
+      c = 0;
+   }
+
+   std::cout
+      << "c: "
+      << c
+      << std::endl;
+
+   std::to_chars(result.data(), result.data() + result.size(), c, r);
+   std::string result_str(result.data());
+
+   std::cout
+      << "result: "
+      << result_str
+      << std::endl;
+
+   txt_str_res.clear();
+   txt_str_res.append(result_str);
+
+   crnt_mode = CALC_MODE::AFTER;
+
+   display_area.queue_draw();
+
+   return;
+}
+
 
 /**
  * @brief      { item_description }
@@ -503,6 +611,12 @@ void AppWindow::determine_mode(char const *) // UNUSED ARGUMENT
       case (CALC_MODE::SOLVE):
       {
          crnt_mode = CALC_MODE::SOLVE;
+      }
+      break;
+      
+      case (CALC_MODE::AFTER):
+      {
+         crnt_mode = CALC_MODE::ARG_A;
       }
       break;
 
