@@ -1,9 +1,9 @@
 version: v1.0
-name: Apple/Mojave Based Pipeline
+name: Example Builds for macOS
 agent:
-  machine:
-    type: a1-standard-4
-    os_image: macos-mojave-xcode11
+    machine:
+        type: a1-standard-4
+        os_image: macos-xcode11
 blocks:
   - name: macOS Builds
     task:
